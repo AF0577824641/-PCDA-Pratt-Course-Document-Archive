@@ -1,4 +1,3 @@
--- Drop tables in reverse order of dependencies to avoid constraint violations
 DROP TABLE IF EXISTS documents_users CASCADE;
 DROP TABLE IF EXISTS syllabi_documents CASCADE;
 DROP TABLE IF EXISTS documents CASCADE;
@@ -23,7 +22,7 @@ create table documents (
   title text,
   publishing_year int,
   genre_id int references tags(id),
-  filepath text, -- Changed file_path to filepath to match the database
+  filepath text,
   document_type text,
   created_at timestamp default current_timestamp,
   url text,
@@ -31,7 +30,7 @@ create table documents (
   updated_at timestamp default current_timestamp
 );
 
--- Sample documents with various document types
+
 insert into documents (title, publishing_year, genre_id, filepath, document_type) values ('Verity', 2022, 1, '/documents/verity.pdf', 'PDF');
 insert into documents (title, publishing_year, genre_id, filepath, document_type) values ('The Fault in Our Stars', 2012, 2, '/documents/tfios.epub', 'EPUB');
 insert into documents (title, publishing_year, genre_id, filepath, document_type) values ('Twilight', 2005, 3, '/documents/twilight.mobi', 'MOBI');
@@ -41,7 +40,6 @@ insert into documents (title, publishing_year, genre_id, filepath, document_type
 insert into documents (title, publishing_year, genre_id, filepath, document_type) values ('Web Development Basics', 2021, 4, '/documents/web_dev.txt', 'TXT');
 
 
--- Create documents_users table for reading status
 create table documents_users (
   id serial primary key,
   document_id int references documents(id),
@@ -49,8 +47,6 @@ create table documents_users (
   read_status text
 );
 
-
--- Create courses table
 create table courses (
   id serial primary key,
   code text not null,
@@ -60,7 +56,7 @@ create table courses (
   created_at timestamp default current_timestamp
 );
 
--- Insert sample courses
+
 insert into courses (code, title, department) values
   ('INFO 101', 'Introduction to Information Science', 'Information Science'),
   ('INFO 202', 'Web Development Fundamentals', 'Information Science'),
@@ -68,7 +64,7 @@ insert into courses (code, title, department) values
   ('INFO 405', 'Digital Libraries', 'Information Science'),
   ('INFO 287', 'Information Architecture', 'Information Science');
 
-  -- Create syllabi table
+
   create table syllabi (
     id serial primary key,
     semester varchar not null,
@@ -80,7 +76,7 @@ insert into courses (code, title, department) values
     updated_at timestamp default current_timestamp
   );
 
-  -- Create syllabi_documents junction table
+
   create table syllabi_documents (
     id serial primary key,
     syllabus_id int references syllabi(id) on delete cascade,
@@ -89,21 +85,20 @@ insert into courses (code, title, department) values
     unique (syllabus_id, document_id)
   );
 
-  -- Sample syllabi data
+
   insert into syllabi (
     course_id,
     semester,
     year,
     instructor,
     url_link
-  ) values 
+  ) values
   (1, 'Fall', 2025, 'Dr. Jane Smith', 'https://drive.google.com/file/d/abc123/view'),
   (2, 'Spring', 2025, 'Dr. John Doe', 'https://drive.google.com/file/d/def456/view'),
   (3, 'Fall', 2025, 'Prof. Maria Garcia', 'https://drive.google.com/file/d/ghi789/view'),
   (4, 'Spring', 2026, 'Dr. Robert Chen', 'https://drive.google.com/file/d/jkl012/view'),
   (5, 'Summer', 2025, 'Dr. Sarah Johnson', 'https://drive.google.com/file/d/mno345/view');
 
--- Create users table (exists in the database)
 create table users (
   id serial primary key,
   name text,
@@ -112,7 +107,6 @@ create table users (
   salt text
 );
 
--- Add indexes for better performance
 CREATE INDEX idx_documents_document_type ON documents(document_type);
 CREATE INDEX idx_documents_title ON documents(title);
 CREATE INDEX idx_documents_publishing_year ON documents(publishing_year);

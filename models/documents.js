@@ -3,7 +3,9 @@ const path = require("path");
 const fs = require("fs");
 
 exports.all = async () => {
-  const { rows } = await db.getPool().query("select * from documents order by created_at desc");
+  const { rows } = await db
+    .getPool()
+    .query("select * from documents order by created_at desc");
   return db.camelize(rows);
 };
 
@@ -30,13 +32,18 @@ exports.getRelatedDocuments = async (documentId, limit = 3) => {
     const { rows } = await db.getPool().query(query, params);
     return db.camelize(rows);
   } catch (error) {
-    console.error(`Error getting related documents for document ${documentId}:`, error);
+    console.error(
+      `Error getting related documents for document ${documentId}:`,
+      error
+    );
     return [];
   }
 };
 
 exports.get = async (id) => {
-  const { rows } = await db.getPool().query("select * from documents where id = $1", [id]);
+  const { rows } = await db
+    .getPool()
+    .query("select * from documents where id = $1", [id]);
   return rows.length ? db.camelize(rows)[0] : null;
 };
 
@@ -139,7 +146,8 @@ exports.add = async (document) => {
   const client = await db.getPool().connect();
   try {
     await client.query("BEGIN");
-    const { title, description, syllabusId, filename, filepath, filesize } = document;
+    const { title, description, syllabusId, filename, filepath, filesize } =
+      document;
     const { rows } = await client.query(
       `insert into documents (title, description, filename, filepath, filesize)
        values ($1, $2, $3, $4, $5) returning *`,
@@ -178,18 +186,17 @@ exports.update = async (document) => {
 exports.delete = async (id) => {
   const document = await exports.get(id);
   if (!document) return false;
-  
+
   if (document.filepath) {
     const fullPath = path.join(process.cwd(), document.filepath);
     if (fs.existsSync(fullPath)) {
       fs.unlinkSync(fullPath);
     }
   }
-  
-  const { rowCount } = await db.getPool().query(
-    "delete from documents where id = $1",
-    [id]
-  );
+
+  const { rowCount } = await db
+    .getPool()
+    .query("delete from documents where id = $1", [id]);
   return rowCount > 0;
 };
 
@@ -212,9 +219,6 @@ exports.linkToSyllabus = async (documentId, syllabusId) => {
   }
 };
 
-/**
- * Remove association between a document and a syllabus
- */
 exports.unlinkFromSyllabus = async (documentId, syllabusId) => {
   try {
     const { rowCount } = await db.getPool().query(
@@ -229,20 +233,16 @@ exports.unlinkFromSyllabus = async (documentId, syllabusId) => {
   }
 };
 
-/**
- * Get documents by document type
- */
 exports.getByDocumentType = async (documentType) => {
-  const { rows } = await db.getPool().query(
-    "select * from documents where document_type = $1 order by created_at desc",
-    [documentType]
-  );
+  const { rows } = await db
+    .getPool()
+    .query(
+      "select * from documents where document_type = $1 order by created_at desc",
+      [documentType]
+    );
   return db.camelize(rows);
 };
 
-/**
- * Create or update a document
- */
 exports.upsert = async (document) => {
   if (document.id) {
     return exports.update(document);

@@ -1,1 +1,1 @@
-# -PCDA-Pratt-Course-Document-Archive
+# PCDA-Pratt-Course-Document-Archive

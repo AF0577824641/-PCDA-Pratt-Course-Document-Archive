@@ -3,6 +3,6 @@ module.exports = {
   postgres: {
     connectionString:
       process.env.DBCONNECTIONSTRING ||
-      "postgresql://postgres:mypostgresql@localhost:5432/my_first_db",
+      "postgresql://adonisfuentes:mypostgresql@localhost:5432/my_first_db",
   },
 };

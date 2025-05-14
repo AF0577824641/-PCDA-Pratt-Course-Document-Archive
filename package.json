@@ -5,13 +5,14 @@
   "private": true,
   "scripts": {
     "start": "node ./docsystem.js",
-    "dev": "concurrently \"npm run sass:watch\" \"nodemon docsystem.js\"",
+    "dev": "concurrently --hide 0 \"npm run sass:watch\" \"nodemon docsystem.js\"",
     "sass": "sass --watch scss:public/css",
-    "sass:watch": "sass --watch scss/styles.scss public/css/styles.css"
+    "sass:watch": "sass --watch scss/styles.scss public/css/styles.css --quiet"
   },
   "dependencies": {
     "body-parser": "^1.20.3",
     "bootstrap": "^5.3.3",
+    "connect-pg-simple": "^10.0.0",
     "cookie-parser": "^1.4.7",
     "csurf": "^1.10.0",
     "date-fns": "^2.30.0",

@@ -47,6 +47,7 @@ class SyllabiModel {
           department: syllabus.courseDepartment,
           credits: syllabus.courseCredits,
         };
+      }
 
       // Ensure URL link is properly formatted
       if (syllabus.urlLink) {
@@ -54,9 +55,7 @@ class SyllabiModel {
       }
 
       // Handle empty strings for optional fields
-      [
-        "courseDescription",
-      ].forEach((field) => {
+      ["courseDescription"].forEach((field) => {
         if (syllabus[field] === "") {
           syllabus[field] = null;
         }
@@ -104,15 +103,6 @@ class SyllabiModel {
 
       // Verify database connection first
       await pool.query("SELECT 1");
-
-      const queryParams = [
-        syllabus.semester,
-        syllabus.year,
-        syllabus.instructor,
-        syllabus.courseId,
-        syllabus.urlLink,
-        syllabus.id,
-      ];
 
       const { rows } = await pool.query(
         `UPDATE syllabi SET

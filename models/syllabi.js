@@ -48,34 +48,6 @@ class SyllabiModel {
           credits: syllabus.courseCredits,
         };
 
-        // Remove the flat course fields
-        delete syllabus.courseCode;
-        delete syllabus.courseTitle;
-        delete syllabus.courseDepartment;
-        delete syllabus.courseCredits;
-      }
-
-      // Convert learning objectives to array if it's a string
-      if (syllabus.learningObjectives) {
-        try {
-          syllabus.learningObjectives =
-            typeof syllabus.learningObjectives === "string"
-              ? JSON.parse(syllabus.learningObjectives)
-              : syllabus.learningObjectives;
-        } catch (e) {
-          console.error("Error parsing learning objectives:", e);
-          syllabus.learningObjectives = [syllabus.learningObjectives];
-        }
-      }
-
-      // Format weekly schedule if it exists
-      if (syllabus.weeklySchedule) {
-        syllabus.weeklySchedule = syllabus.weeklySchedule
-          .split("\n")
-          .map((week) => week.trim())
-          .filter((week) => week.length > 0);
-      }
-
       // Ensure URL link is properly formatted
       if (syllabus.urlLink) {
         syllabus.urlLink = syllabus.urlLink.trim();

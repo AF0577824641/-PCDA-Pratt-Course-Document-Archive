@@ -56,9 +56,6 @@ class SyllabiModel {
       // Handle empty strings for optional fields
       [
         "courseDescription",
-        "requiredMaterials",
-        "gradingPolicy",
-        "officeHours",
       ].forEach((field) => {
         if (syllabus[field] === "") {
           syllabus[field] = null;

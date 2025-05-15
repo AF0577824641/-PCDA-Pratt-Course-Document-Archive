@@ -11,11 +11,6 @@ create table tags (
   name text
 );
 
-insert into tags (name) values ('Psychological Thriller');
-insert into tags (name) values ('Romance');
-insert into tags (name) values ('Fantasy');
-insert into tags (name) values ('Science Fiction');
-insert into tags (name) values ('Dystopian Fiction');
 
 create table documents (
   id serial primary key,
